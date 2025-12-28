@@ -10,7 +10,133 @@
 
 ## 部署方式
 
-### 方式一：直接部署到云服务器（推荐）
+### 方式一：免费云平台部署（推荐，无需付费）
+
+#### Zeabur部署（国内访问最快）⭐ 强烈推荐
+
+**优点**：
+- 完全免费（每月$5额度）
+- 国内访问速度快
+- 配置简单，GitHub自动部署
+- 支持Node.js
+
+**部署步骤**：
+
+1. **注册账号**
+   - 访问 https://zeabur.com
+   - 使用GitHub账号登录
+
+2. **创建项目**
+   - 点击 "New Project"
+   - 选择 "Import from GitHub"
+   - 授权GitHub并选择仓库：`pingshengyanyuren-a11y/nanjingxing`
+
+3. **配置服务**
+   - Zeabur会自动检测Node.js项目
+   - 点击服务进入配置页面
+
+4. **设置环境变量**
+   - 点击服务 → "Variables" 标签
+   - 添加以下环境变量：
+     ```
+     PORT=3001
+     OPENAI_API_KEY=你的API密钥
+     OPENAI_BASE_URL=https://api.siliconflow.cn/v1
+     ```
+
+5. **部署**
+   - 点击 "Deploy" 按钮
+   - 等待部署完成（约1-2分钟）
+   - 部署完成后会获得类似 `https://nanjing-travel.zeabur.app` 的域名
+
+**注意事项**：
+- 免费额度每月$5，足够运行此项目
+- 15分钟无访问会自动休眠，再次访问需要10-20秒启动
+- 数据存储在内存中，休眠后数据会丢失（建议使用外部数据库）
+
+#### Render部署（配置最简单）
+
+**优点**：
+- Web服务永久免费
+- 配置简单，GitHub集成
+- 支持自动部署
+
+**部署步骤**：
+
+1. **注册账号**
+   - 访问 https://render.com
+   - 使用GitHub账号登录
+
+2. **创建Web服务**
+   - 点击 "New +" → "Web Service"
+   - 点击 "Connect" 连接GitHub仓库
+   - 选择仓库：`pingshengyanyuren-a11y/nanjingxing`
+
+3. **配置服务**
+   - Name: `nanjing-travel`
+   - Runtime: `Node`
+   - Build Command: `npm install`
+   - Start Command: `node server.js`
+
+4. **设置环境变量**
+   - 在 "Environment" 部分添加：
+     ```
+     PORT=3001
+     OPENAI_API_KEY=你的API密钥
+     OPENAI_BASE_URL=https://api.siliconflow.cn/v1
+     ```
+
+5. **部署**
+   - 点击 "Create Web Service"
+   - 等待部署完成（约2-3分钟）
+   - 访问：`https://nanjing-travel.onrender.com`
+
+**注意事项**：
+- 免费版会休眠，15分钟无访问后休眠，再次访问需要15秒启动
+- 国内访问速度一般
+- 每月750小时免费额度
+
+#### Railway部署（功能强大）
+
+**优点**：
+- 每月$5免费额度
+- 功能强大，支持数据库
+- 界面友好
+
+**部署步骤**：
+
+1. **注册账号**
+   - 访问 https://railway.app
+   - 使用GitHub账号登录
+
+2. **创建项目**
+   - 点击 "New Project"
+   - 选择 "Deploy from GitHub repo"
+   - 选择仓库：`pingshengyanyuren-a11y/nanjingxing`
+
+3. **配置服务**
+   - Railway会自动检测Node.js项目
+   - 点击服务进入配置页面
+
+4. **设置环境变量**
+   - 点击 "Variables" 标签
+   - 添加：
+     ```
+     PORT=3001
+     OPENAI_API_KEY=你的API密钥
+     OPENAI_BASE_URL=https://api.siliconflow.cn/v1
+     ```
+
+5. **部署**
+   - 点击 "Deploy"
+   - 部署完成后会自动分配域名
+
+**注意事项**：
+- 免费额度每月$5，足够运行此项目
+- 国内访问速度一般
+- 支持添加PostgreSQL等数据库
+
+### 方式二：直接部署到云服务器（需要付费）
 
 #### 1. 准备工作
 - 一台国内云服务器（阿里云、腾讯云、华为云等）
