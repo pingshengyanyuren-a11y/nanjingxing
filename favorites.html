@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的收藏 - 金陵札记</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'daiwa-gray': '#5A5A5A',
+                        'palace-red': '#C41E3A',
+                        'moon-white': '#F5F5F0',
+                        'stone-blue': '#3D5A80',
+                        'light-beige': '#F5F2E9',
+                        'sky-blue': '#87CEEB',
+                        'grass-green': '#66CC66',
+                        'warm-yellow': '#FFCC66',
+                    },
+                    fontFamily: {
+                        'song': ['serif'],
+                        'kai': ['cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="./css/styles.css" rel="stylesheet">
+    <style>
+        .tab-active {
+            border-bottom: 3px solid #C41E3A;
+            color: #C41E3A;
+            font-weight: bold;
+        }
+
+        .tab-inactive {
+            color: #5A5A5A;
+            cursor: pointer;
+        }
+
+        .tab-inactive:hover {
+            color: #3D5A80;
+        }
+    </style>
+</head>
+
+<body class="bg-moon-white font-song text-daiwa-gray min-h-screen flex flex-col">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 bg-white/90 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-kai text-stone-blue font-bold tracking-wider">金陵札记</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold">返回首页</a>
+                <span class="text-palace-red font-bold border-b-2 border-palace-red">我的收藏</span>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow pt-24 container mx-auto px-4 mb-20">
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden min-h-[600px]">
+            <!-- Headers / Tabs -->
+            <div class="flex border-b border-gray-200">
+                <button onclick="switchTab('attractions')" id="tab-attractions"
+                    class="flex-1 py-4 text-center text-lg transition-colors tab-active">
+                    <i class="fa fa-university mr-2"></i> 景点收藏
+                </button>
+                <button onclick="switchTab('plans')" id="tab-plans"
+                    class="flex-1 py-4 text-center text-lg transition-colors tab-inactive">
+                    <i class="fa fa-map-o mr-2"></i> 行程规划
+                </button>
+                <button onclick="switchTab('food')" id="tab-food"
+                    class="flex-1 py-4 text-center text-lg transition-colors tab-inactive">
+                    <i class="fa fa-cutlery mr-2"></i> 美食攻略
+                </button>
+            </div>
+
+            <!-- Content Area -->
+            <div id="content-area" class="p-6 md:p-10 bg-light-beige/30 min-h-[500px]">
+                <!-- Dynamic Content Loading -->
+                <div class="text-center py-20 text-gray-400">
+                    <i class="fa fa-spinner fa-spin text-4xl mb-4"></i>
+                    <p>正在加载收藏...</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    </footer>
+
+    <!-- 悬浮音乐播放器 -->
+    <div id="music-player-container">
+        <!-- 旋转唱片 -->
+        <div id="music-disc" class="music-disc" title="点击播放/暂停">
+            <!-- 唱片封面 -->
+        </div>
+
+        <!-- 控制条 -->
+        <div class="music-controls">
+            <span id="current-song-name" class="song-info">青花瓷 - 周杰伦</span>
+            <button id="btn-prev" class="control-btn" title="上一首"><i class="fa fa-step-backward"></i></button>
+            <button id="btn-play-pause" class="control-btn" title="播放/暂停"><i class="fa fa-play"></i></button>
+            <button id="btn-next" class="control-btn" title="下一首"><i class="fa fa-step-forward"></i></button>
+            <button id="btn-toggle-effects" class="control-btn" title="开关粒子效果"
+                style="margin-left: 8px; background: rgba(255,182,193,0.3);"><i class="fa fa-snowflake-o"></i></button>
+        </div>
+
+        <!-- 音频元素 -->
+        <audio id="bg-music" preload="none"></audio>
+    </div>
+
+    <script>
+        // State
+        let currentTab = 'attractions';
+        let attractionsData = []; // Cache for raw attraction details
+
+        // 初始化
+        async function init() {
+            // Fetch attractions raw data map
+            try {
+                const res = await fetch('data/attractions.json');
+                const data = await res.json();
+                attractionsData = data.attractions || [];
+            } catch (e) {
+                console.error("Failed to load attractions.json", e);
+            }
+
+            // Load default tab
+            switchTab('attractions');
+        }
+
+        // 切换标签
+        window.switchTab = async function (tab) {
+            currentTab = tab;
+
+            // Update UI
+            ['attractions', 'plans', 'food'].forEach(t => {
+                const el = document.getElementById(`tab-${t}`);
+                if (t === tab) {
+                    el.className = 'flex-1 py-4 text-center text-lg transition-colors tab-active';
+                } else {
+                    el.className = 'flex-1 py-4 text-center text-lg transition-colors tab-inactive';
+                }
+            });
+
+            // Fetch and Render
+            const container = document.getElementById('content-area');
+            container.innerHTML = `
+                <div class="text-center py-20 text-gray-400">
+                    <i class="fa fa-spinner fa-spin text-4xl mb-4"></i>
+                    <p>正在加载...</p>
+                </div>`;
+
+            try {
+                // Determine API type param
+                const apiType = tab === 'attractions' ? 'attraction' : (tab === 'plans' ? 'plan' : 'food');
+                const res = await fetch(`/api/v1/collections?type=${apiType}`);
+                const result = await res.json();
+
+                if (result.code === 200) {
+                    renderContent(tab, result.data);
+                } else {
+                    container.innerHTML = `<div class="text-center py-20 text-red-400">加载失败: ${result.msg}</div>`;
+                }
+            } catch (e) {
+                container.innerHTML = `<div class="text-center py-20 text-red-400">网络错误</div>`;
+            }
+        };
+
+        function renderContent(tab, items) {
+            const container = document.getElementById('content-area');
+
+            if (items.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-20 text-gray-400 flex flex-col items-center">
+                        <i class="fa fa-folder-open-o text-5xl mb-4 opacity-50"></i>
+                        <p class="text-xl">暂无收藏内容</p>
+                        <a href="index.html" class="mt-6 px-6 py-2 bg-stone-blue text-white rounded-full hover:bg-palace-red transition-colors">去首页逛逛</a>
+                    </div>`;
+                return;
+            }
+
+            if (tab === 'attractions') {
+                renderAttractions(container, items);
+            } else if (tab === 'plans') {
+                renderPlans(container, items);
+            } else if (tab === 'food') {
+                renderFood(container, items);
+            }
+        }
+
+        function renderAttractions(container, items) {
+            // Items contain target_id. We need to find details in attractionsData.
+            let html = '<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">';
+
+            items.forEach(item => {
+                const detail = attractionsData.find(a => a.id.toString() === item.target_id);
+                if (detail) {
+                    html += `
+                        <div class="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 group">
+                            <div class="h-48 bg-cover bg-center group-hover:scale-105 transition-transform duration-500" style="background-image: url('${detail.image}')"></div>
+                            <div class="p-5 relative bg-white">
+                                <h3 class="text-xl font-bold text-stone-blue mb-2">${detail.name}</h3>
+                                <p class="text-gray-500 text-sm line-clamp-2 mb-3">${detail.description}</p>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-palace-red font-bold">${detail.ticketPrice}</span>
+                                    <div class="flex gap-2">
+                                        <a href="attraction-detail.html?id=${detail.id}" target="_blank" class="px-3 py-1 bg-light-beige text-stone-blue rounded hover:bg-stone-blue hover:text-white transition-colors text-sm font-bold">
+                                            查看详情
+                                        </a>
+                                        <button onclick="removeCollection(${item.id})" class="px-3 py-1 bg-red-50 text-red-500 rounded hover:bg-red-500 hover:text-white transition-all text-sm group" title="移除收藏">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderPlans(container, items) {
+            let html = '<div class="space-y-6">';
+            items.forEach(item => {
+                let content = {};
+                try {
+                    content = JSON.parse(item.content);
+                } catch (e) { content = { theme: '解析错误' }; }
+
+                html += `
+                    <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border-l-4 border-stone-blue flex justify-between items-start">
+                        <div class="flex-1">
+                            <div class="flex items-center gap-3 mb-2">
+                                <span class="bg-stone-blue text-white text-xs px-2 py-1 rounded">行程</span>
+                                <h3 class="text-xl font-bold text-stone-blue">${content.theme || '我的行程'}</h3>
+                                <span class="text-gray-400 text-sm"><i class="fa fa-clock-o"></i> ${new Date(item.created_at).toLocaleDateString()}</span>
+                            </div>
+                            <div class="flex gap-4 text-sm text-gray-600 mb-4">
+                                <span><i class="fa fa-calendar"></i> ${content.days || '?'} 天</span>
+                                <span><i class="fa fa-jpy"></i> ${content.total_budget || '未知预算'}</span>
+                                <span><i class="fa fa-tags"></i> ${content.interests ? content.interests.join(',') : '无标签'}</span>
+                            </div>
+                            <button onclick="showPlanDetail('${encodeURIComponent(JSON.stringify(content))}', ${item.id})" class="text-stone-blue hover:text-palace-red font-bold text-sm underline">
+                                查看完整路线详情
+                            </button>
+                        </div>
+                        <button onclick="removeCollection(${item.id})" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all ml-4" title="删除行程">
+                            <i class="fa fa-trash text-lg"></i>
+                        </button>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function renderFood(container, items) {
+            let html = '<div class="grid grid-cols-1 gap-6">';
+            items.forEach(item => {
+                let content = {};
+                try {
+                    content = JSON.parse(item.content);
+                } catch (e) { content = { question: '解析错误' }; }
+
+                html += `
+                    <div class="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-all border-t-4 border-warm-yellow">
+                        <div class="flex justify-between items-start mb-4">
+                            <div class="flex items-center gap-2">
+                                <i class="fa fa-question-circle text-stone-blue text-xl"></i>
+                                <h3 class="text-lg font-bold text-gray-800">${content.question}</h3>
+                            </div>
+                            <button onclick="removeCollection(${item.id})" class="bg-red-50 text-red-500 p-2 rounded-lg hover:bg-red-500 hover:text-white transition-all ml-4">
+                                <i class="fa fa-trash"></i> 删除攻略
+                            </button>
+                        </div>
+                        <div class="bg-light-beige/50 p-4 rounded-lg text-gray-600 text-sm leading-relaxed whitespace-pre-wrap max-h-40 overflow-hidden relative group cursor-pointer" onclick="this.classList.toggle('max-h-40');this.classList.toggle('overflow-hidden')">
+                            ${content.answer || '无内容'}
+                            <div class="absolute bottom-0 left-0 w-full h-8 bg-gradient-to-t from-light-beige to-transparent pointer-events-none group-hover:hidden"></div>
+                        </div>
+                        <p class="text-center text-xs text-stone-blue mt-2 opacity-50">点击展开/收起</p>
+                    </div>
+                `;
+            });
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        window.removeCollection = async function (id) {
+            if (!confirm('确定要移除这条收藏吗？')) return;
+            try {
+                const res = await fetch(`/api/v1/collections/${id}`, { method: 'DELETE' });
+                const result = await res.json();
+                if (result.code === 200) {
+                    // Reload current tab
+                    switchTab(currentTab);
+                } else {
+                    alert('删除失败:' + result.msg);
+                }
+            } catch (e) {
+                alert('删除失败');
+            }
+        };
+
+        window.showPlanDetail = function (encodedJson, collectionId) {
+            const data = JSON.parse(decodeURIComponent(encodedJson));
+
+            // Basic Modal Implementation
+            const modalHtml = `
+                <div id="plan-modal" class="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-fade-in">
+                    <div class="bg-white rounded-xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+                        <!-- Header -->
+                        <div class="p-6 border-b flex justify-between items-center bg-stone-blue text-white">
+                            <h2 class="text-2xl font-bold">${data.theme}</h2>
+                            <div class="flex items-center gap-4">
+                                <button onclick="removeCollection(${collectionId}); document.getElementById('plan-modal').remove();" class="bg-red-500/20 hover:bg-red-500 px-4 py-2 rounded-lg transition-colors text-sm font-bold flex items-center gap-2">
+                                    <i class="fa fa-trash"></i> 删除此行程
+                                </button>
+                                <button onclick="document.getElementById('plan-modal').remove()" class="text-white/70 hover:text-white transition-colors">
+                                    <i class="fa fa-times text-2xl"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Body -->
+                        <div class="p-6 overflow-y-auto bg-light-beige/30 flex-grow">
+                            <div class="space-y-6">
+                                ${data.daily_itineraries.map((day, idx) => `
+                                    <div class="bg-white p-5 rounded-xl shadow-sm border-l-4 border-palace-red">
+                                        <h3 class="font-bold text-stone-blue text-xl mb-3 flex items-center">
+                                            <span class="w-8 h-8 bg-palace-red text-white rounded-full flex items-center justify-center mr-3 text-sm">${idx + 1}</span>
+                                            Day ${idx + 1}: ${day.title || '今日行程'}
+                                        </h3>
+                                        <div class="space-y-3">
+                                            ${day.activities.map(act => `
+                                                <div class="flex gap-4 p-3 bg-gray-50 rounded-lg">
+                                                    <div class="w-20 text-xs font-bold text-gray-400 pt-1 uppercase">${act.time}</div>
+                                                    <div class="flex-1">
+                                                        <div class="font-bold text-gray-800">${act.description || (act.attraction ? act.attraction.name : '未知活动')}</div>
+                                                        ${act.location ? `<div class="text-xs text-gray-500 mt-1"><i class="fa fa-map-marker"></i> ${act.location}</div>` : ''}
+                                                    </div>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                            
+                            <!-- Tips -->
+                            ${data.tips ? `
+                                <div class="mt-8 p-6 bg-warm-yellow/10 border-l-4 border-warm-yellow rounded-r-xl">
+                                    <h4 class="font-bold text-warm-yellow-800 mb-3 flex items-center gap-2">
+                                        <i class="fa fa-lightbulb-o"></i> 旅行贴士
+                                    </h4>
+                                    <ul class="list-disc pl-5 space-y-1 text-gray-600 text-sm">
+                                        ${data.tips.map(tip => `<li>${tip}</li>`).join('')}
+                                    </ul>
+                                </div>
+                            ` : ''}
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="p-4 border-t bg-gray-50 flex justify-end">
+                            <button onclick="document.getElementById('plan-modal').remove()" class="px-8 py-2 bg-stone-blue text-white rounded-lg hover:bg-stone-700 transition-colors font-bold">
+                                关闭
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        init();
+    </script>
+</body>
+
+</html>

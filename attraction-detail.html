@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>景点详情 - 金陵札记</title>
+    <!-- 外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'daiwa-gray': '#5A5A5A',
+                        'palace-red': '#C41E3A',
+                        'moon-white': '#F5F5F0',
+                        'stone-blue': '#3D5A80',
+                        'light-beige': '#F5F2E9',
+                        'sky-blue': '#87CEEB',  /* 天空蓝 */
+                        'grass-green': '#66CC66',  /* 草木绿 */
+                        'warm-yellow': '#FFCC66',  /* 暖黄色 */
+                    },
+                    fontFamily: {
+                        'song': ['serif'],
+                        'kai': ['cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 引入外部CSS文件 -->
+    <link href="./css/styles.css" rel="stylesheet">
+    <!-- 引入腾讯地图JavaScript SDK -->
+    <script src="https://map.qq.com/api/js?v=2.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+    <!-- 动画样式 -->
+    <style>
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.8s ease-out forwards;
+        }
+    </style>
+</head>
+
+<body class="bg-moon-white bg-texture font-song text-daiwa-gray">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-sky-blue bg-opacity-95">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <h1 class="text-3xl font-kai text-white text-shadow">金陵札记</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="text-white hover:text-grass-green transition-colors duration-300">首页</a>
+                <a href="index.html#attractions"
+                    class="text-white hover:text-grass-green transition-colors duration-300">景点指南</a>
+                <a href="index.html#notes"
+                    class="text-white hover:text-grass-green transition-colors duration-300">精彩笔记</a>
+                <a href="index.html#routes"
+                    class="text-white hover:text-grass-green transition-colors duration-300">路线规划</a>
+                <a href="index.html#about"
+                    class="text-white hover:text-grass-green transition-colors duration-300">关于我们</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:block">
+                    <input type="text" placeholder="搜索景点或攻略..."
+                        class="px-4 py-2 rounded-full text-daiwa-gray focus:outline-none focus:ring-2 focus:ring-grass-green w-64">
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-toggle" class="text-white focus:outline-none">
+                        <i class="fa fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu" class="hidden md:hidden bg-sky-blue bg-opacity-95 absolute w-full top-full">
+                <div class="container mx-auto px-4 py-4 flex flex-col space-y-4">
+                    <div class="md:hidden mb-4">
+                        <input type="text" placeholder="搜索景点或攻略..."
+                            class="px-4 py-2 rounded-full text-daiwa-gray focus:outline-none focus:ring-2 focus:ring-grass-green w-full">
+                    </div>
+                    <a href="index.html" class="text-white hover:text-grass-green transition-colors duration-300">首页</a>
+                    <a href="index.html#attractions"
+                        class="text-white hover:text-grass-green transition-colors duration-300">景点指南</a>
+                    <a href="index.html#notes"
+                        class="text-white hover:text-grass-green transition-colors duration-300">精彩笔记</a>
+                    <a href="index.html#routes"
+                        class="text-white hover:text-grass-green transition-colors duration-300">路线规划</a>
+                    <a href="index.html#about"
+                        class="text-white hover:text-grass-green transition-colors duration-300">关于我们</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 景点详情 -->
+    <section class="pt-24 pb-16">
+        <div class="container mx-auto px-4">
+            <!-- 返回按钮 -->
+            <div class="mb-8 animate-fade-in">
+                <a href="index.html#attractions"
+                    class="inline-flex items-center text-stone-blue hover:text-palace-red transition-colors">
+                    <i class="fa fa-arrow-left mr-2"></i>
+                    返回景点列表
+                </a>
+            </div>
+
+            <!-- 景点基本信息 -->
+            <div class="bg-white rounded-lg shadow-lg overflow-hidden animate-fade-in">
+                <!-- 景点图片 -->
+                <div class="relative h-96">
+                    <img id="attraction-image" src="" alt="景点图片" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black bg-opacity-50 flex items-end">
+                        <div class="p-6 text-white">
+                            <h2 id="attraction-name" class="text-4xl font-kai text-shadow mb-2"></h2>
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center">
+                                    <i class="fa fa-star text-yellow-400 mr-1"></i>
+                                    <span id="attraction-rating"></span>
+                                </div>
+                                <div>
+                                    <i class="fa fa-map-marker mr-1"></i>
+                                    <span id="attraction-address"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 景点详情内容 -->
+                <div class="p-8">
+                    <!-- 景点描述 -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4 text-stone-blue">景点介绍</h3>
+                        <p id="attraction-description" class="text-gray-700 leading-relaxed"></p>
+                    </div>
+
+                    <!-- 景点信息卡片 -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div class="bg-light-beige rounded-lg p-6 shadow-md">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fa fa-clock-o text-palace-red mr-2"></i>
+                                开放时间
+                            </h4>
+                            <p id="attraction-opening-hours" class="text-gray-700"></p>
+                        </div>
+                        <div class="bg-light-beige rounded-lg p-6 shadow-md">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fa fa-ticket text-palace-red mr-2"></i>
+                                门票价格
+                            </h4>
+                            <p id="attraction-ticket-price" class="text-gray-700"></p>
+                        </div>
+                        <div class="bg-light-beige rounded-lg p-6 shadow-md">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fa fa-bus text-palace-red mr-2"></i>
+                                交通信息
+                            </h4>
+                            <p id="attraction-transportation" class="text-gray-700"></p>
+                        </div>
+                        <div class="bg-light-beige rounded-lg p-6 shadow-md">
+                            <h4 class="font-bold text-lg mb-3 flex items-center">
+                                <i class="fa fa-tags text-palace-red mr-2"></i>
+                                景点分类
+                            </h4>
+                            <div id="attraction-categories" class="flex flex-wrap gap-2"></div>
+                        </div>
+                    </div>
+
+                    <!-- 相关推荐 -->
+                    <div class="mb-8">
+                        <h3 class="text-2xl font-bold mb-4 text-stone-blue">相关推荐</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6" id="related-attractions">
+                            <!-- 相关推荐内容将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+
+                    <!-- 分享和收藏 -->
+                    <div class="flex flex-wrap gap-4">
+                        <button
+                            class="px-6 py-3 bg-palace-red text-white rounded-full hover:bg-stone-blue transition-colors duration-300 flex items-center">
+                            <i class="fa fa-heart-o mr-2"></i>
+                            收藏景点
+                        </button>
+                        <button
+                            class="px-6 py-3 bg-stone-blue text-white rounded-full hover:bg-palace-red transition-colors duration-300 flex items-center">
+                            <i class="fa fa-share-alt mr-2"></i>
+                            分享景点
+                        </button>
+                        <button
+                            class="px-6 py-3 bg-grass-green text-white rounded-full hover:bg-palace-red transition-colors duration-300 flex items-center">
+                            <i class="fa fa-map-marker mr-2"></i>
+                            查看地图
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    </footer>
+
+    <!-- 悬浮音乐播放器 -->
+    <div id="music-player-container">
+        <!-- 旋转唱片 -->
+        <div id="music-disc" class="music-disc" title="点击播放/暂停">
+            <!-- 唱片封面 -->
+        </div>
+
+        <!-- 控制条 -->
+        <div class="music-controls">
+            <span id="current-song-name" class="song-info">青花瓷 - 周杰伦</span>
+            <button id="btn-prev" class="control-btn" title="上一首"><i class="fa fa-step-backward"></i></button>
+            <button id="btn-play-pause" class="control-btn" title="播放/暂停"><i class="fa fa-play"></i></button>
+            <button id="btn-next" class="control-btn" title="下一首"><i class="fa fa-step-forward"></i></button>
+            <button id="btn-toggle-effects" class="control-btn" title="开关粒子效果"
+                style="margin-left: 8px; background: rgba(255,182,193,0.3);"><i class="fa fa-snowflake-o"></i></button>
+        </div>
+
+        <!-- 音频元素 -->
+        <audio id="bg-music" preload="none"></audio>
+    </div>
+
+    <!-- 地图模态框 -->
+    <div id="map-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-4xl h-3/4 relative">
+            <button id="close-map" class="absolute top-4 right-4 text-gray-500 hover:text-red-500 text-2xl z-10">
+                <i class="fa fa-times"></i>
+            </button>
+            <div id="map-container" class="w-full h-full"></div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="js/seasonal-effects.js"></script>
+    <script src="./js/scripts.js"></script>
+    <script>
+        // 导航栏滚动效果
+        window.addEventListener('scroll', function () {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                navbar.classList.add('shadow-md');
+            } else {
+                navbar.classList.remove('shadow-md');
+            }
+        });
+
+        // 移动端菜单切换
+        document.getElementById('menu-toggle').addEventListener('click', function () {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // 从URL获取景点ID
+        function getAttractionId() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get('id');
+        }
+
+        // 加载景点数据
+        async function loadAttractionData() {
+            try {
+                const attractionId = getAttractionId();
+                // 从本地JSON文件获取数据
+                const response = await fetch('./data/attractions.json');
+                const data = await response.json();
+                const attractions = data.attractions;
+                // 直接使用字符串比较，因为JSON中的id是字符串类型
+                const attraction = attractions.find(att => att.id === attractionId);
+
+                if (attraction) {
+                    // 填充景点数据
+                    document.getElementById('attraction-name').textContent = attraction.name;
+                    document.getElementById('attraction-image').src = attraction.image;
+                    document.getElementById('attraction-rating').textContent = attraction.rating;
+                    document.getElementById('attraction-address').textContent = attraction.address;
+                    document.getElementById('attraction-description').textContent = attraction.description;
+                    document.getElementById('attraction-opening-hours').textContent = attraction.openingHours;
+                    document.getElementById('attraction-ticket-price').textContent = attraction.ticketPrice;
+                    document.getElementById('attraction-transportation').textContent = attraction.transportation;
+
+                    // 填充分类标签
+                    const categoriesContainer = document.getElementById('attraction-categories');
+                    attraction.category.forEach(cat => {
+                        const categoryElement = document.createElement('span');
+                        categoryElement.className = 'inline-block px-3 py-1 bg-stone-blue text-white text-sm rounded-full';
+                        categoryElement.textContent = getCategoryName(cat);
+                        categoriesContainer.appendChild(categoryElement);
+                    });
+
+                    // 生成相关推荐
+                    generateRelatedAttractions(attraction.id, attractions);
+                } else {
+                    // 景点不存在
+                    document.getElementById('attraction-name').textContent = '景点不存在';
+                    document.getElementById('attraction-description').textContent = '抱歉，您查找的景点不存在。';
+                }
+            } catch (error) {
+                console.error('加载景点数据失败:', error);
+                document.getElementById('attraction-description').textContent = '加载景点数据失败，请稍后重试。';
+            }
+        }
+
+        // 获取分类名称
+        function getCategoryName(category) {
+            const categoryMap = {
+                'history': '历史人文',
+                'nature': '自然景观',
+                'food': '美食街区',
+                'city': '城市休闲',
+                'free': '免费景点',
+                'student': '学生优惠',
+                'family': '亲子友好',
+                'photo': '拍照打卡'
+            };
+            return categoryMap[category] || category;
+        }
+
+        // 生成相关推荐
+        function generateRelatedAttractions(currentId, allAttractions) {
+            try {
+                const relatedContainer = document.getElementById('related-attractions');
+                // 从所有景点中筛选出与当前景点不同的景点，并随机选择3个
+                // 确保currentId是字符串类型，与JSON中的id类型一致
+                const relatedAttractions = allAttractions.filter(a => a.id !== currentId.toString())
+                    .sort(() => Math.random() - 0.5)
+                    .slice(0, 3);
+
+                relatedAttractions.forEach(attraction => {
+                    const relatedElement = document.createElement('div');
+                    relatedElement.className = 'bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1';
+                    relatedElement.innerHTML = `
+                        <div class="h-48 overflow-hidden">
+                            <img src="${attraction.image}" alt="${attraction.name}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-bold text-lg mb-2 text-stone-blue hover:text-palace-red transition-colors">${attraction.name}</h4>
+                            <div class="flex items-center mb-2">
+                                <i class="fa fa-star text-yellow-400 mr-1"></i>
+                                <span>${attraction.rating}</span>
+                            </div>
+                            <a href="attraction-detail.html?id=${attraction.id}" class="text-stone-blue hover:text-palace-red font-bold inline-flex items-center">
+                                查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                            </a>
+                        </div>
+                    `;
+                    relatedContainer.appendChild(relatedElement);
+                });
+            } catch (error) {
+                console.error('加载相关推荐失败:', error);
+            }
+        }
+
+        // 地图功能实现
+        function initMap() {
+            // 获取查看地图按钮
+            const viewMapBtn = document.querySelector('button:nth-of-type(3)');
+            const mapModal = document.getElementById('map-modal');
+            const closeMapBtn = document.getElementById('close-map');
+            const mapContainer = document.getElementById('map-container');
+
+            let map = null;
+            let marker = null;
+
+            // 点击查看地图按钮
+            if (viewMapBtn) {
+                viewMapBtn.addEventListener('click', function () {
+                    mapModal.classList.remove('hidden');
+
+                    // 如果地图尚未初始化，初始化地图
+                    if (!map) {
+                        initQQMap();
+                    }
+                });
+            }
+
+            // 点击关闭按钮
+            if (closeMapBtn) {
+                closeMapBtn.addEventListener('click', function () {
+                    mapModal.classList.add('hidden');
+                });
+            }
+
+            // 点击模态框背景关闭
+            if (mapModal) {
+                mapModal.addEventListener('click', function (e) {
+                    if (e.target === mapModal) {
+                        mapModal.classList.add('hidden');
+                    }
+                });
+            }
+
+            // 初始化腾讯地图
+            function initQQMap() {
+                // 创建地图实例
+                map = new qq.maps.Map(mapContainer, {
+                    center: new qq.maps.LatLng(32.0603, 118.7969), // 南京默认坐标
+                    zoom: 15,
+                    mapTypeId: qq.maps.MapTypeId.ROADMAP,
+                    zoomControlOptions: {
+                        position: qq.maps.ControlPosition.RIGHT_BOTTOM
+                    },
+                    scaleControl: true,
+                    scaleControlOptions: {
+                        position: qq.maps.ControlPosition.BOTTOM_LEFT
+                    }
+                });
+
+                // 获取景点信息
+                const attractionName = document.getElementById('attraction-name').textContent;
+                const address = document.getElementById('attraction-address').textContent;
+
+                // 使用腾讯地图的地理编码服务将地址转换为坐标
+                const geocoder = new qq.maps.Geocoder({
+                    complete: function (result) {
+                        if (result.detail.location) {
+                            // 获取坐标
+                            const location = result.detail.location;
+
+                            // 设置地图中心点
+                            map.setCenter(location);
+
+                            // 创建标记
+                            marker = new qq.maps.Marker({
+                                position: location,
+                                map: map,
+                                title: attractionName
+                            });
+
+                            // 创建信息窗口
+                            const infoWindow = new qq.maps.InfoWindow({
+                                content: `<div style="padding: 10px;"><strong>${attractionName}</strong><p>${address}</p></div>`
+                            });
+
+                            // 打开信息窗口
+                            infoWindow.open(map, marker);
+
+                            // 点击标记时显示信息窗口
+                            qq.maps.event.addListener(marker, 'click', function () {
+                                infoWindow.open(map, marker);
+                            });
+                        } else {
+                            console.error('根据地址获取经纬度失败:', result);
+                            alert('无法获取景点位置，请稍后重试');
+                        }
+                    }
+                });
+
+                // 发起地理编码请求
+                geocoder.getLocation(address);
+            }
+        }
+
+        // 页面加载完成后加载景点数据和初始化地图功能
+        window.addEventListener('DOMContentLoaded', async function () {
+            // 先加载景点数据
+            await loadAttractionData();
+            // 数据加载完成后初始化地图功能
+            initMap();
+        });
+    </script>
+</body>
+
+</html>

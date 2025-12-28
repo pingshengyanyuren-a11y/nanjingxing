@@ -1,0 +1,1034 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金陵札记 - 南京城市游攻略</title>
+    <!-- 外部资源 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <!-- 自定义Tailwind配置 -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'daiwa-gray': '#5A5A5A',
+                        'palace-red': '#C41E3A',
+                        'moon-white': '#F5F5F0',
+                        'stone-blue': '#3D5A80',
+                        'light-beige': '#F5F2E9',
+                        'sky-blue': '#87CEEB',  /* 天空蓝 */
+                        'grass-green': '#66CC66',  /* 草木绿 */
+                        'warm-yellow': '#FFCC66',  /* 暖黄色 */
+                    },
+                    fontFamily: {
+                        'song': ['serif'],
+                        'kai': ['cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- 引入外部CSS文件 -->
+    <link href="./css/styles.css" rel="stylesheet">
+    <!-- 引入腾讯地图JavaScript SDK -->
+    <!-- 引入腾讯地图JavaScript SDK -->
+    <script id="qqmap-script" src="https://map.qq.com/api/js?v=2.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"
+        onerror="console.error('Tencent Map Script Load Error'); alert('腾讯地图脚本加载被拦截！可能是SSL证书错误或网络限制。请检查控制台ERR_CERT_AUTHORITY_INVALID错误。');"></script>
+    <!-- 引入html2canvas用于生成海报 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <!-- 引入qrcodejs用于生成二维码 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- 动画样式 -->
+    <style>
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .animate-fade-in-down {
+            animation: fadeInDown 1s ease-out forwards;
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 1s ease-out forwards;
+        }
+
+        .animate-zoom-in {
+            animation: zoomIn 0.8s ease-out forwards;
+        }
+
+        .bg-texture {
+            background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z" fill="%239C92AC" fill-opacity="0.05" fill-rule="evenodd"/%3E%3C/svg%3E');
+        }
+
+        /* 平滑滚动 */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* 阴影效果 */
+        .custom-shadow {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 卡片悬停效果 */
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+    </style>
+</head>
+
+<body class="bg-moon-white bg-texture font-song text-daiwa-gray">
+    <!-- 导航栏 -->
+    <header id="navbar" class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <h1 class="text-3xl md:text-4xl font-kai text-stone-blue font-bold tracking-wider">金陵札记</h1>
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    首页
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="index.html#attractions"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    景点指南
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="index.html#notes"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    精彩笔记
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="index.html#routes"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    路线规划
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="index.html#about"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    关于我们
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="favorites.html"
+                    class="text-stone-blue hover:text-palace-red transition-all duration-300 font-semibold relative group">
+                    我的收藏
+                    <span
+                        class="absolute bottom-0 left-0 w-0 h-0.5 bg-palace-red transition-all duration-300 group-hover:w-full"></span>
+                </a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <!-- 搜索框 -->
+                <div class="relative hidden md:block w-64">
+                    <input type="text" id="search-input" placeholder="搜索景点或攻略..."
+                        class="w-full px-4 py-2 pl-10 rounded-full bg-light-beige text-daiwa-gray focus:outline-none focus:ring-2 focus:ring-palace-red transition-all shadow-sm hover:shadow-md">
+                    <i
+                        class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 transition-colors hover:text-palace-red"></i>
+                    <!-- 搜索结果下拉框 -->
+                    <div id="search-results"
+                        class="absolute left-0 right-0 mt-2 bg-white rounded-xl shadow-xl hidden z-50 max-h-60 overflow-y-auto border border-gray-100">
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="menu-toggle"
+                        class="text-stone-blue focus:outline-none hover:text-palace-red transition-colors duration-300 p-2 rounded-full hover:bg-light-beige">
+                        <i class="fa fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- 移动端菜单 -->
+            <div id="mobile-menu"
+                class="hidden md:hidden bg-white shadow-xl absolute w-full top-full left-0 right-0 z-50 rounded-b-xl border-t border-gray-100">
+                <div class="container mx-auto px-4 py-4 flex flex-col space-y-3">
+                    <!-- 移动端搜索框 -->
+                    <div class="relative mb-4">
+                        <input type="text" id="mobile-search-input" placeholder="搜索景点或攻略..."
+                            class="w-full px-4 py-2 pl-10 rounded-full bg-light-beige text-daiwa-gray focus:outline-none focus:ring-2 focus:ring-palace-red transition-all shadow-sm">
+                        <i class="fa fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+                        <!-- 移动端搜索结果下拉框 -->
+                        <div id="mobile-search-results"
+                            class="absolute left-0 right-0 mt-2 bg-white rounded-lg shadow-lg hidden z-50 max-h-60 overflow-y-auto border border-gray-100">
+                        </div>
+                    </div>
+                    <a href="index.html"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">首页</a>
+                    <a href="index.html#attractions"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">景点指南</a>
+                    <a href="index.html#notes"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">精彩笔记</a>
+                    <a href="index.html#routes"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">路线规划</a>
+                    <a href="index.html#about"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">关于我们</a>
+                    <a href="favorites.html"
+                        class="text-stone-blue hover:text-palace-red transition-colors duration-300 font-semibold py-3 px-4 rounded-lg hover:bg-light-beige">我的收藏</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- 轮播图 -->
+    <section class="relative h-[60vh] md:h-[80vh] lg:h-screen overflow-hidden">
+        <div id="carousel" class="relative h-full">
+            <!-- 轮播内容将由 JavaScript 加载 -->
+        </div>
+
+        <!-- 左右控制箭头 -->
+        <button id="prev-slide"
+            class="absolute left-4 md:left-8 top-1/2 transform -translate-y-1/2 bg-white/20 text-white p-3 md:p-4 rounded-full hover:bg-white/40 transition-all duration-500 z-10 backdrop-blur-md shadow-lg hover:shadow-xl">
+            <i class="fa fa-chevron-left text-2xl md:text-3xl"></i>
+        </button>
+        <button id="next-slide"
+            class="absolute right-4 md:right-8 top-1/2 transform -translate-y-1/2 bg-white/20 text-white p-3 md:p-4 rounded-full hover:bg-white/40 transition-all duration-500 z-10 backdrop-blur-md shadow-lg hover:shadow-xl">
+            <i class="fa fa-chevron-right text-2xl md:text-3xl"></i>
+        </button>
+
+        <!-- 轮播控制 -->
+        <div id="carousel-dots"
+            class="absolute bottom-8 md:bottom-16 left-0 right-0 flex justify-center space-x-3 md:space-x-4">
+            <!-- 指示器将由 JavaScript 加载 -->
+        </div>
+
+        <!-- 暂停/播放按钮 -->
+        <button id="play-pause"
+            class="absolute top-6 md:top-10 right-6 md:right-10 bg-white/20 text-white p-3 md:p-4 rounded-full hover:bg-white/40 transition-all duration-500 z-10 backdrop-blur-md shadow-lg hover:shadow-xl">
+            <i class="fa fa-pause text-lg md:text-xl"></i>
+        </button>
+    </section>
+
+
+
+    <!-- 热门景点TOP10 -->
+    <section class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-kai text-center mb-16 text-stone-blue relative">
+                <span class="inline-block relative">
+                    热门景点TOP10
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-palace-red"></span>
+                </span>
+            </h2>
+            <div id="top10-container" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                <!-- 热门景点 TOP10 将由 JavaScript 加载 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 南京特色景点 -->
+    <section id="attractions" class="py-24 bg-gradient-to-b from-white to-light-beige">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-kai text-center mb-16 text-stone-blue relative">
+                <span class="inline-block relative">
+                    南京特色景点
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-palace-red"></span>
+                </span>
+            </h2>
+
+            <!-- 分类筛选 -->
+            <div class="flex flex-wrap justify-center gap-3 md:gap-4 mb-16">
+                <button
+                    class="filter-btn px-6 py-3 bg-palace-red text-white rounded-full hover:bg-stone-blue transition-all duration-300 active shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                    data-filter="all">全部</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="history">历史人文</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="nature">自然景观</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="city">城市休闲</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="food">美食街区</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="family">亲子友好</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="photo">拍照打卡</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="free">免费景点</button>
+                <button
+                    class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                    data-filter="student">学生优惠</button>
+            </div>
+
+            <!-- 地图区域 -->
+            <div
+                class="mb-16 bg-white rounded-2xl shadow-xl overflow-hidden transform hover:shadow-2xl transition-all duration-300">
+                <div
+                    class="p-6 bg-gradient-to-r from-stone-blue to-palace-red text-white flex justify-between items-center">
+                    <h3 class="font-bold text-xl md:text-2xl">南京景点分布图</h3>
+                    <span class="text-sm bg-white/20 px-3 py-1 rounded-full backdrop-blur-sm">点击景点查看详情</span>
+                </div>
+                <div class="h-96 relative overflow-hidden">
+                    <!-- 地图加载动画 -->
+                    <div id="map-loading"
+                        class="absolute inset-0 bg-gradient-to-br from-light-beige to-white flex items-center justify-center z-10">
+                        <div class="text-center">
+                            <div
+                                class="inline-block animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-palace-red mb-4">
+                            </div>
+                            <p class="text-gray-600 text-lg font-medium">地图加载中...</p>
+                            <p class="text-sm text-gray-500 mt-2">点击下方景点卡片可在地图上定位</p>
+                        </div>
+                    </div>
+                    <!-- 地图将通过JavaScript动态加载 -->
+                    <div id="attractions-map" class="w-full h-full transition-opacity duration-500 opacity-0"></div>
+                    <!-- 地图图例 -->
+                    <div
+                        class="absolute bottom-4 right-4 bg-white bg-opacity-90 backdrop-blur-sm rounded-lg shadow-lg p-4 z-20">
+                        <h4 class="font-bold text-sm text-stone-blue mb-2">景点图例</h4>
+                        <div class="space-y-2">
+                            <div class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-palace-red mr-2"></div>
+                                <span>历史人文</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-grass-green mr-2"></div>
+                                <span>自然景观</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-stone-blue mr-2"></div>
+                                <span>城市休闲</span>
+                            </div>
+                            <div class="flex items-center text-sm">
+                                <div class="w-3 h-3 rounded-full bg-warm-yellow mr-2"></div>
+                                <span>美食街区</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 景点列表 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="attractions-container">
+                <!-- 景点将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 南京特色美食 -->
+    <section id="food" class="py-24 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-kai text-center mb-16 text-stone-blue relative">
+                <span class="inline-block relative">
+                    南京特色美食
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-warm-yellow"></span>
+                </span>
+            </h2>
+
+            <!-- 美食列表 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8" id="food-container">
+                <!-- 美食将通过JavaScript动态加载 -->
+            </div>
+        </div>
+    </section>
+
+    <!-- AI 美食顾问版块 -->
+    <section id="ai-food-consultant" class="py-20 relative overflow-hidden">
+        <!-- 装饰背景 -->
+        <div class="absolute inset-0 bg-gradient-to-b from-stone-50/80 to-white z-0"></div>
+        <div class="absolute top-0 left-0 w-full h-full opacity-5 pointer-events-none z-0"
+            style="background-image: url('data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%233D5A80\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');">
+        </div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-12">
+                <h2
+                    class="text-3xl md:text-5xl font-bold text-stone-blue mb-4 tracking-tight relative inline-block font-kai">
+                    AI 美食私厨
+                    <span
+                        class="absolute -bottom-2 left-0 w-full h-1.5 bg-gradient-to-r from-transparent via-palace-red to-transparent opacity-80 rounded-full"></span>
+                </h2>
+                <p class="text-lg text-gray-500 font-song mt-4">“金陵烟火气，最抚凡人心” —— 让大模型为您寻觅那一口地道滋味</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <!-- 玻璃拟态卡片 -->
+                <div
+                    class="bg-white/80 backdrop-blur-xl rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/50 p-8 md:p-10 transition-all duration-500 hover:shadow-[0_25px_60px_rgba(61,90,128,0.15)]">
+
+                    <div class="flex flex-col md:flex-row items-start gap-6 mb-8">
+                        <div
+                            class="w-16 h-16 rounded-2xl bg-gradient-to-br from-palace-red to-red-600 text-white flex items-center justify-center flex-shrink-0 shadow-lg transform rotate-3 hover:rotate-6 transition-transform duration-300">
+                            <i class="fa fa-cutlery text-3xl"></i>
+                        </div>
+                        <div class="flex-1 w-full">
+                            <label for="ai-food-question"
+                                class="block text-xl font-bold text-stone-blue mb-3 font-song">
+                                今天想吃点什么？
+                                <span class="text-sm font-normal text-gray-400 ml-2">(支持此时此地、预算偏好、口味忌口)</span>
+                            </label>
+                            <div class="relative group">
+                                <textarea id="ai-food-question" rows="3"
+                                    class="w-full px-6 py-4 rounded-xl bg-gray-50/50 border border-gray-200 text-gray-700 text-lg placeholder-gray-400 focus:bg-white focus:border-stone-blue/30 focus:ring-4 focus:ring-stone-blue/10 outline-none transition-all resize-none shadow-inner"
+                                    placeholder="试试问：&#13;&#10;“我是大学生，想在夫子庙附近找一家人均50元以内的地道南京菜，不要太辣...”"></textarea>
+                                <div class="absolute bottom-3 right-3 text-xs text-gray-300 pointer-events-none">
+                                    Qwen/QwQ-32B Supported</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end items-center gap-4 border-b border-gray-100 pb-8 mb-8">
+                        <span class="text-xs text-gray-400 italic font-serif">DeepSeek/SiliconFlow 提供算力支持</span>
+                        <button id="ask-ai-btn"
+                            class="group relative px-8 py-3 bg-gradient-to-r from-stone-blue to-blue-700 text-white rounded-xl shadow-lg hover:shadow-blue-500/30 transition-all duration-300 font-bold overflow-hidden">
+                            <span class="relative z-10 flex items-center gap-2">
+                                <i class="fa fa-magic group-hover:animate-pulse"></i>
+                                开始寻味
+                            </span>
+                            <div
+                                class="absolute inset-0 bg-gradient-to-r from-palace-red to-red-600 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            </div>
+                        </button>
+                    </div>
+
+                    <!-- AI 回答区域 -->
+                    <div id="ai-response-area" class="hidden animate-fadeInDown">
+                        <div class="flex items-start gap-5">
+                            <div class="w-12 h-12 rounded-full bg-stone-blue p-1 shadow-md flex-shrink-0">
+                                <i
+                                    class="fa fa-robot text-2xl text-white flex items-center justify-center h-full w-full"></i>
+                            </div>
+                            <div class="flex-1">
+                                <div
+                                    class="bg-gradient-to-br from-blue-50/80 to-white rounded-2xl rounded-tl-none p-6 shadow-sm border border-blue-50/50 text-left">
+                                    <div
+                                        class="flex items-center justify-between mb-4 pb-2 border-b border-blue-100/50">
+                                        <h4 class="font-bold text-stone-blue font-kai text-lg">南京老饕 · 智能推荐</h4>
+                                        <div class="flex gap-1">
+                                            <span class="w-2 h-2 rounded-full bg-red-400 animate-bounce"
+                                                style="animation-delay: 0s"></span>
+                                            <span class="w-2 h-2 rounded-full bg-yellow-400 animate-bounce"
+                                                style="animation-delay: 0.2s"></span>
+                                            <span class="w-2 h-2 rounded-full bg-green-400 animate-bounce"
+                                                style="animation-delay: 0.4s"></span>
+                                        </div>
+                                    </div>
+                                    <div id="ai-response-content"
+                                        class="prose prose-stone max-w-none text-gray-700 leading-relaxed font-sans text-base">
+                                        <!-- 回答内容将在这里显示 -->
+                                    </div>
+                                </div>
+                                <div class="mt-2 text-right">
+                                    <button
+                                        class="text-xs text-gray-400 hover:text-stone-blue transition-colors gap-1 inline-flex items-center">
+                                        <i class="fa fa-thumbs-o-up"></i> 有帮助
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 加载状态 -->
+                    <div id="ai-loading" class="hidden text-center py-12">
+                        <div class="relative w-20 h-20 mx-auto mb-4">
+                            <div class="absolute inset-0 border-4 border-gray-100 rounded-full"></div>
+                            <div
+                                class="absolute inset-0 border-4 border-t-palace-red border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin">
+                            </div>
+                            <i
+                                class="fa fa-cutlery absolute inset-0 flex items-center justify-center text-gray-300 text-xl"></i>
+                        </div>
+                        <p class="text-stone-blue font-kai text-lg animate-pulse">正在穿梭于南京的大街小巷...</p>
+                        <p class="text-xs text-gray-400 mt-2">Connecting to QwQ-32B...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 精彩笔记区 -->
+    <section id="notes" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-4xl md:text-5xl font-kai text-center mb-16 text-stone-blue relative">
+                <span class="inline-block relative">
+                    最近被南京游客翻烂的笔记
+                    <span class="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-40 h-1 bg-palace-red"></span>
+                </span>
+            </h2>
+
+            <!-- 筛选和排序控件 -->
+            <div
+                class="flex flex-col md:flex-row justify-between items-center mb-12 p-6 bg-gradient-to-r from-light-beige to-white rounded-2xl shadow-lg">
+                <div class="flex flex-wrap gap-3 mb-6 md:mb-0">
+                    <button
+                        class="filter-btn px-6 py-3 bg-palace-red text-white rounded-full hover:bg-stone-blue transition-all duration-300 active shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+                        data-filter="all">全部</button>
+                    <button
+                        class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                        data-filter="亲子攻略">亲子攻略</button>
+                    <button
+                        class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                        data-filter="避坑指南">避坑指南</button>
+                    <button
+                        class="filter-btn px-6 py-3 bg-white text-daiwa-gray rounded-full hover:bg-palace-red hover:text-white transition-all duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-1"
+                        data-filter="路线规划">路线规划</button>
+                </div>
+
+                <div class="flex items-center space-x-4 bg-white p-4 rounded-xl shadow-md">
+                    <span class="text-gray-700 font-medium">排序:</span>
+                    <select id="sort-notes"
+                        class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-palace-red transition-all shadow-sm">
+                        <option value="default">默认</option>
+                        <option value="likes">按点赞数</option>
+                        <option value="bookmarks">按收藏数</option>
+                        <option value="newest">最新</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="notes-container">
+                <!-- 笔记将通过JavaScript动态加载 -->
+            </div>
+
+            <div class="text-center mt-16">
+                <a href="notes.html"
+                    class="inline-block px-10 py-4 bg-palace-red text-white rounded-full hover:bg-stone-blue transition-all duration-500 font-bold transform hover:scale-105 shadow-xl hover:shadow-2xl text-lg">
+                    查看更多笔记 <i class="fa fa-long-arrow-right ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 路线规划区 -->
+    <section id="routes" class="py-20 bg-gradient-to-b from-light-beige to-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-kai text-center mb-12 text-stone-blue">精选南京游玩路线</h2>
+
+            <!-- 自定义规划表单 -->
+            <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 mb-12">
+                <h3 class="text-2xl font-bold mb-6 text-center text-stone-blue">定制我的行程</h3>
+                <form id="custom-route-form" class="space-y-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- 出行天数 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="days">出行天数</label>
+                            <select id="days"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-palace-red transition-all">
+                                <option value="1">1日游</option>
+                                <option value="2">2日游</option>
+                                <option value="3">3日游</option>
+                                <option value="4">4日游</option>
+                                <option value="5">5日游</option>
+                            </select>
+                        </div>
+
+                        <!-- 预算范围 -->
+                        <div>
+                            <label class="block text-gray-700 font-bold mb-2" for="budget">预算范围</label>
+                            <input type="number" id="budget" placeholder="请输入预算金额（元/人）" min="0"
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-palace-red transition-all">
+                            <p class="text-xs text-gray-500 mt-1">请输入您的预算金额，如：500</p>
+                        </div>
+                    </div>
+
+                    <!-- 兴趣标签 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-3">兴趣标签</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="history">
+                                <span>历史人文</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="nature">
+                                <span>自然景观</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="city">
+                                <span>城市休闲</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="food">
+                                <span>美食街区</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="free">
+                                <span>免费景点</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="student">
+                                <span>学生优惠</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="family">
+                                <span>亲子友好</span>
+                            </label>
+                            <label
+                                class="flex items-center p-3 bg-light-beige rounded-lg cursor-pointer hover:bg-palace-red/10 transition-colors">
+                                <input type="checkbox" class="mr-3 text-palace-red" value="photo">
+                                <span>拍照打卡</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 特殊需求 -->
+                    <div>
+                        <label class="block text-gray-700 font-bold mb-2" for="special-needs">特殊需求</label>
+                        <textarea id="special-needs"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-palace-red transition-all"
+                            rows="3" placeholder="如：不爬山、需要无障碍设施、素食偏好等"></textarea>
+                    </div>
+
+                    <!-- 提交按钮 -->
+                    <div class="text-center">
+                        <button type="submit"
+                            class="px-10 py-3 bg-palace-red text-white rounded-full hover:bg-stone-blue transition-all duration-300 font-bold mr-4 transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            生成我的行程 <i class="fa fa-magic ml-2"></i>
+                        </button>
+                        <button type="button" id="reset-form"
+                            class="px-10 py-3 bg-stone-blue text-white rounded-full hover:bg-palace-red transition-all duration-300 font-bold transform hover:scale-105 shadow-lg hover:shadow-xl">
+                            重新开始 <i class="fa fa-refresh ml-2"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- 示例行程展示区域 -->
+            <div id="sample-routes" class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center text-stone-blue">示例行程</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- 路线1：经典3日游 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
+                        <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-palace-red/10 to-white">
+                            <h3 class="text-2xl font-bold flex items-center text-stone-blue">
+                                <span
+                                    class="w-10 h-10 rounded-full bg-palace-red text-white flex items-center justify-center mr-3 text-lg">3</span>
+                                南京经典3日游
+                            </h3>
+                            <p class="text-gray-500 mt-2">覆盖核心景点，感受六朝古都魅力</p>
+                        </div>
+                        <div class="p-6">
+                            <!-- 第一天 -->
+                            <div class="mb-6">
+                                <h4 class="font-bold text-lg text-palace-red mb-3 flex items-center">
+                                    <i class="fa fa-calendar-check-o mr-2"></i> Day 1：历史文化线
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>上午：</strong>中山陵（免费，需预约）→ 音乐台（10元）喂白鸽
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-cutlery"></i></span>
+                                        <div>
+                                            <strong>中午：</strong>陵园路梧桐餐厅（美龄粥必点）
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>下午：</strong>明孝陵（70元）→ 石象路拍照
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-moon-o"></i></span>
+                                        <div>
+                                            <strong>晚上：</strong>新街口商圈晚餐+逛街
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- 第二天 -->
+                            <div class="mb-6">
+                                <h4 class="font-bold text-lg text-palace-red mb-3 flex items-center">
+                                    <i class="fa fa-calendar-check-o mr-2"></i> Day 2：民国风情线
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>上午：</strong>总统府（35元）→ 江宁织造博物馆
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-cutlery"></i></span>
+                                        <div>
+                                            <strong>中午：</strong>老门东小吃（蒋有记锅贴、陆氏梅花糕）
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>下午：</strong>中华门瓮城（50元）→ 老门东历史街区
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-moon-o"></i></span>
+                                        <div>
+                                            <strong>晚上：</strong>秦淮河游船（140元）+ 夫子庙夜景
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- 第三天 -->
+                            <div>
+                                <h4 class="font-bold text-lg text-palace-red mb-3 flex items-center">
+                                    <i class="fa fa-calendar-check-o mr-2"></i> Day 3：自然休闲线
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>上午：</strong>玄武湖（免费）骑行环湖 → 鸡鸣寺（10元）
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-cutlery"></i></span>
+                                        <div>
+                                            <strong>中午：</strong>科巷美食街（许阿姨糕团店）
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-palace-red mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>下午：</strong>颐和路民国公馆区 → 先锋书店（五台山店）
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-light-beige flex justify-between items-center rounded-b-xl">
+                            <div>
+                                <span class="text-gray-500">预算参考：</span>
+                                <span class="font-bold text-palace-red text-lg">¥600-800/人</span>
+                            </div>
+                            <a href="#"
+                                class="text-stone-blue hover:text-palace-red transition-colors font-bold flex items-center">
+                                下载完整行程 <i class="fa fa-download ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- 路线2：文艺小众2日游 -->
+                    <div class="bg-white rounded-xl overflow-hidden shadow-lg card-hover">
+                        <div class="p-6 border-b border-gray-100 bg-gradient-to-r from-stone-blue/10 to-white">
+                            <h3 class="text-2xl font-bold flex items-center text-stone-blue">
+                                <span
+                                    class="w-10 h-10 rounded-full bg-stone-blue text-white flex items-center justify-center mr-3 text-lg">2</span>
+                                文艺小众2日游
+                            </h3>
+                            <p class="text-gray-500 mt-2">避开人潮，发现南京的文艺一面</p>
+                        </div>
+                        <div class="p-6">
+                            <!-- 第一天 -->
+                            <div class="mb-6">
+                                <h4 class="font-bold text-lg text-stone-blue mb-3 flex items-center">
+                                    <i class="fa fa-calendar-check-o mr-2"></i> Day 1：老城烟火线
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>上午：</strong>老门东三条营 → 芥子园（30元）
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-cutlery"></i></span>
+                                        <div>
+                                            <strong>中午：</strong>老门东"小潘记鸭血粉丝"
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>下午：</strong>愚园（20元）→ 胡家花园
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-moon-o"></i></span>
+                                        <div>
+                                            <strong>晚上：</strong>南湖小区（金陵鸡蛋汉堡、南湖鸭血粉丝）
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <!-- 第二天 -->
+                            <div>
+                                <h4 class="font-bold text-lg text-stone-blue mb-3 flex items-center">
+                                    <i class="fa fa-calendar-check-o mr-2"></i> Day 2：文艺打卡线
+                                </h4>
+                                <ul class="space-y-3">
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>上午：</strong>四方当代美术馆（80元）→ 佛手湖
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-cutlery"></i></span>
+                                        <div>
+                                            <strong>中午：</strong>浦口火车站附近"左师傅梅花糕"
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-map-marker"></i></span>
+                                        <div>
+                                            <strong>下午：</strong>颐和路民国馆 → 国立美术陈列馆
+                                        </div>
+                                    </li>
+                                    <li class="flex items-start">
+                                        <span class="text-stone-blue mr-3 mt-1"><i class="fa fa-moon-o"></i></span>
+                                        <div>
+                                            <strong>晚上：</strong>1912街区夜景 → 清吧小坐
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="p-6 bg-light-beige flex justify-between items-center rounded-b-xl">
+                            <div>
+                                <span class="text-gray-500">预算参考：</span>
+                                <span class="font-bold text-stone-blue text-lg">¥400-600/人</span>
+                            </div>
+                            <a href="#"
+                                class="text-stone-blue hover:text-palace-red transition-colors font-bold flex items-center">
+                                下载完整行程 <i class="fa fa-download ml-1"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 关于我们 -->
+    <section id="about" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-kai text-center mb-12 text-stone-blue">关于金陵札记</h2>
+
+            <div class="max-w-3xl mx-auto text-center">
+                <div
+                    class="w-24 h-24 bg-gradient-to-br from-palace-red to-stone-blue rounded-full flex items-center justify-center mx-auto mb-8 shadow-lg">
+                    <i class="fa fa-book text-white text-4xl"></i>
+                </div>
+                <p class="text-lg mb-6 text-gray-700 leading-relaxed">
+                    金陵札记是由河海大学学生创建的南京游攻略平台，聚焦真实有用的本地信息，帮你避开网红陷阱，发现南京的真正魅力。</p>
+                <p class="text-lg mb-8 text-gray-700 leading-relaxed">
+                    所有笔记均来自小红书、大众点评等平台的真实用户分享，已获得授权或标注来源，如需查看完整内容可点击原文链接。</p>
+                <div class="flex justify-center space-x-6">
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-palace-red text-white flex items-center justify-center hover:bg-stone-blue transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <i class="fa fa-weibo text-xl"></i>
+                    </a>
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-palace-red text-white flex items-center justify-center hover:bg-stone-blue transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <i class="fa fa-wechat text-xl"></i>
+                    </a>
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-palace-red text-white flex items-center justify-center hover:bg-stone-blue transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <i class="fa fa-envelope text-xl"></i>
+                    </a>
+                    <a href="#"
+                        class="w-12 h-12 rounded-full bg-palace-red text-white flex items-center justify-center hover:bg-stone-blue transition-all duration-300 transform hover:scale-110 shadow-lg">
+                        <i class="fa fa-instagram text-xl"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 悬浮音乐播放器 -->
+    <div id="music-player-container">
+        <!-- 旋转唱片 -->
+        <div id="music-disc" class="music-disc" title="点击播放/暂停">
+            <!-- 唱片封面 -->
+        </div>
+
+        <!-- 控制条 -->
+        <div class="music-controls">
+            <span id="current-song-name" class="song-info">青花瓷 - 周杰伦</span>
+            <button id="btn-prev" class="control-btn" title="上一首"><i class="fa fa-step-backward"></i></button>
+            <button id="btn-play-pause" class="control-btn" title="播放/暂停"><i class="fa fa-play"></i></button>
+            <button id="btn-next" class="control-btn" title="下一首"><i class="fa fa-step-forward"></i></button>
+            <button id="btn-toggle-effects" class="control-btn" title="开关粒子效果"
+                style="margin-left: 8px; background: rgba(255,182,193,0.3);"><i class="fa fa-snowflake-o"></i></button>
+        </div>
+
+        <!-- 音频元素 -->
+        <audio id="bg-music" preload="none"></audio>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="bg-stone-blue text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- 品牌信息 -->
+                <div>
+                    <h3 class="text-2xl font-kai mb-4">金陵札记</h3>
+                    <p class="text-gray-300 mb-4">生于西康路，懂南京，更懂你的出行</p>
+                    <div class="flex space-x-3">
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fa fa-weibo text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fa fa-wechat text-lg"></i>
+                        </a>
+                        <a href="#" class="text-gray-300 hover:text-white transition-colors">
+                            <i class="fa fa-envelope text-lg"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- 快速链接 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">快速链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="index.html" class="text-gray-300 hover:text-white transition-colors">首页</a></li>
+                        <li><a href="index.html#attractions"
+                                class="text-gray-300 hover:text-white transition-colors">景点指南</a></li>
+                        <li><a href="index.html#notes" class="text-gray-300 hover:text-white transition-colors">精彩笔记</a>
+                        </li>
+                        <li><a href="index.html#routes"
+                                class="text-gray-300 hover:text-white transition-colors">路线规划</a></li>
+                        <li><a href="index.html#about" class="text-gray-300 hover:text-white transition-colors">关于我们</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- 官方链接 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">官方链接</h4>
+                    <ul class="space-y-3">
+                        <li><a href="http://wlj.nanjing.gov.cn" target="_blank"
+                                class="text-gray-300 hover:text-white transition-colors">南京文旅局官网</a></li>
+                        <li><a href="https://www.njmuseum.org.cn" target="_blank"
+                                class="text-gray-300 hover:text-white transition-colors">南京博物院</a></li>
+                        <li><a href="https://www.zschina.org.cn" target="_blank"
+                                class="text-gray-300 hover:text-white transition-colors">钟山风景区</a></li>
+                        <li><a href="https://www.nj.gov.cn" target="_blank"
+                                class="text-gray-300 hover:text-white transition-colors">南京市政府</a></li>
+                    </ul>
+                </div>
+
+                <!-- 联系我们 -->
+                <div>
+                    <h4 class="font-bold mb-4 text-lg">联系我们</h4>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-envelope mr-3 mt-1 text-gray-300"></i>
+                            <span class="text-gray-300">contact@jinlingnote.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker mr-3 mt-1 text-gray-300"></i>
+                            <span class="text-gray-300">南京市鼓楼区西康路1号</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i class="fa fa-phone mr-3 mt-1 text-gray-300"></i>
+                            <span class="text-gray-300">123-4567-8910</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- 版权信息 -->
+            <div class="border-t border-gray-700 mt-10 pt-6 text-center text-gray-400">
+                <p>© 2024 金陵札记 - 南京旅游攻略 | 保留所有权利</p>
+                <p class="text-sm mt-2">设计制作：河海大学金陵札记团队</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Custom Scripts -->
+    <script src="js/seasonal-effects.js"></script>
+    <script src="./js/scripts.js"></script>
+
+    <!-- 地图弹窗 (Hidden by default) -->
+    <div id="location-map-modal"
+        class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center opacity-0 transition-opacity duration-300">
+        <div
+            class="bg-white rounded-2xl w-[95vw] h-[90vh] flex flex-col shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300 relative mx-4">
+            <!-- 弹窗头部 -->
+            <div class="p-4 border-b border-gray-100 flex justify-between items-center bg-white z-10 shrink-0">
+                <div class="flex items-center gap-6">
+                    <h3 id="modal-map-title" class="text-xl font-bold text-stone-blue font-kai">位置详情</h3>
+                    <!-- Day Tabs Container -->
+                    <div id="map-date-tabs" class="flex gap-2">
+                        <!-- Tabs will be injected here via JS -->
+                    </div>
+                </div>
+                <button id="close-map-modal"
+                    class="w-10 h-10 rounded-full bg-gray-100 text-gray-500 hover:bg-palace-red hover:text-white transition-all flex items-center justify-center shadow-sm">
+                    <i class="fa fa-times text-lg"></i>
+                </button>
+            </div>
+
+            <!-- 地图容器 -->
+            <div id="modal-map-container" class="flex-1 w-full h-full bg-gray-50 relative">
+                <div class="absolute inset-0 flex items-center justify-center text-gray-400 pointer-events-none">
+                    <div class="text-center">
+                        <i class="fa fa-map-o text-4xl mb-2 opacity-50"></i>
+                        <p>地图加载中...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部信息 -->
+            <div
+                class="p-3 bg-stone-50 text-xs text-gray-500 text-center border-t border-gray-100 flex justify-between px-6">
+                <span><i class="fa fa-location-arrow text-palace-red"></i> 上海南路/夫子庙周边</span>
+                <span>腾讯地图 SDK 提供支持</span>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
